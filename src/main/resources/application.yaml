@@ -29,7 +29,7 @@ spring:
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         topics:
-          paymentCreated: ${KAFKA_TOPIC_CREATED:payment-created-event}
+          paymentCreated: ${KAFKA_TOPIC_PAYMENT_CREATED:payment-created-event}
           paymentUpdated: ${KAFKA_TOPIC_UPDATED:payment-updated-event}
     listener:
       concurrency: ${KAFKA_LISTENER_CONCURRENCY:1}
