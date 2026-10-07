@@ -1,0 +1,46 @@
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: order-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${EXTERNAL_PORT}:5432"
+    volumes:
+      - order_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  order-service:
+    image: ${IMAGE_NAME}:${IMAGE_TAG}
+    build: .
+    container_name: order-service
+    restart: unless-stopped
+    ports:
+      - "${SPRING_EXTERNAL_PORT}:8080"
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      SPRING_PROFILES_ACTIVE: ${APP_PROFILE}
+      SPRING_DATASOURCE_URL: ${DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  order_postgres_data:
