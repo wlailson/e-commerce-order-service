@@ -39,7 +39,3 @@ cors:
 
 server:
   port: ${SERVER_PORT:8083}
-
-logging:
-  level:
-    org.springframework.security: DEBUG
