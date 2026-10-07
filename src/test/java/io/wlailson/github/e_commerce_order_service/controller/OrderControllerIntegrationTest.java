@@ -135,5 +135,29 @@ class OrderControllerIntegrationTest {
             verify(orderService).insertOrder(eq(77L), any(OrderRequestDTO.class));
             verify(authenticatedUser).getUserId();
         }
+
+        @Test
+        void rejectsOrderWithoutItems() throws Exception {
+            mockMvc.perform(post("/orders")
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {"items":[]}
+                                    """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.title").value("Validation failed"))
+                    .andExpect(jsonPath("$.errors.items").exists());
+        }
+
+        @Test
+        void rejectsInvalidOrderItemFields() throws Exception {
+            mockMvc.perform(post("/orders")
+                            .contentType(APPLICATION_JSON)
+                            .content("""
+                                    {"items":[{"productId":0,"quantity":0,"price":-1.00}]}
+                                    """))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.title").value("Validation failed"))
+                    .andExpect(jsonPath("$.errors").isNotEmpty());
+        }
     }
 }
