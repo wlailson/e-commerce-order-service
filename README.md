@@ -11,6 +11,10 @@ Serviço responsável pela criação e consulta de pedidos e pelo controle de se
 - Spring StateMachine para controle de transições do pedido.
 - Testes com JUnit Jupiter, Mockito e Testcontainers para PostgreSQL e Kafka.
 
+## Swagger
+
+[📚 Acessar Swagger](https://wlailson.github.io/e-commerce-order-service/)
+
 ## Executar localmente
 
 Pré-requisitos: JDK 25, PostgreSQL e Kafka acessíveis. O perfil de desenvolvimento é ativado por padrão; a configuração local do banco está em `src/main/resources/application-dev.yaml`.
